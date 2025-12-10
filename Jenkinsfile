@@ -60,7 +60,7 @@ pipeline {
         junit 'target/surefire-reports/**/*.xml'
 
         // Publish Allure report
-        allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
+      //  allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
     }
 }
 
