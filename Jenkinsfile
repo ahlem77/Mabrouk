@@ -6,17 +6,16 @@ pipeline {
     }
 
     environment {
-        CUCUMBER_JSON = 'target/cucumber-report.json'
+        CUCUMBER_JSON = 'target/cucumber.json'
         CUCUMBER_HTML = 'target/cucumber-report.html'
-        ALLURE_RESULTS = 'target/allure-results'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/wafa']],
-                    userRemoteConfigs: [[url: 'git@github.com:proservices-tc/square-test-auto.git']]
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[url: 'https://github.com/ahlem77/Mabrouk.git']]
                 ])
             }
         }
@@ -36,16 +35,16 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts artifacts: "${CUCUMBER_JSON}, ${CUCUMBER_HTML}, ${ALLURE_RESULTS}/**", allowEmptyArchive: false
+                archiveArtifacts artifacts: "${CUCUMBER_JSON}, ${CUCUMBER_HTML}/**", allowEmptyArchive: false
             }
         }
 
-        stage('Allure Report') {
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-            }
-        }
-    }
+    //     stage('Allure Report') {
+    //         steps {
+    //             allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
+    //         }
+    //     }
+    // }
 
     post {
     always {
