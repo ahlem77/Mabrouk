@@ -22,30 +22,22 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'mvn clean install -U -DskipTests'
+                bat 'mvn clean install -U -DskipTests'
             }
         }
 
         stage('Run Cucumber Tests') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts artifacts: "${CUCUMBER_JSON}, ${CUCUMBER_HTML}/**", allowEmptyArchive: false
+                archiveArtifacts artifacts: "${CUCUMBER_JSON}, ${CUCUMBER_HTML}/**", allowEmptyArchive: true
             }
         }
-
-        // Example optional Allure stage
-        // stage('Allure Report') {
-        //     steps {
-        //         allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-        //     }
-        // }
-
-    }  // <-- FIN DU BLOC STAGES (il manquait cette accolade !)
+    }
 
     post {
         always {
@@ -58,9 +50,6 @@ pipeline {
             }
 
             junit 'target/surefire-reports/**/*.xml'
-
-            // allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
         }
     }
-
-} // <-- FIN DU pipeline
+}
