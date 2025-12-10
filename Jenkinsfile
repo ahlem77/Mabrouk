@@ -28,7 +28,6 @@ pipeline {
 
         stage('Run Cucumber Tests') {
             steps {
-                // Run tests and generate Allure results
                 sh 'mvn test'
             }
         }
@@ -39,30 +38,29 @@ pipeline {
             }
         }
 
-    //     stage('Allure Report') {
-    //         steps {
-    //             allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-    //         }
-    //     }
-    // }
+        // Example optional Allure stage
+        // stage('Allure Report') {
+        //     steps {
+        //         allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
+        //     }
+        // }
+
+    }  // <-- FIN DU BLOC STAGES (il manquait cette accolade !)
 
     post {
-    always {
-        script {
-            if (fileExists(CUCUMBER_JSON)) {
-                // Publish Cucumber JSON report
-                cucumber fileIncludePattern: CUCUMBER_JSON
-            } else {
-                echo "Cucumber report JSON not found."
+        always {
+            script {
+                if (fileExists(CUCUMBER_JSON)) {
+                    cucumber fileIncludePattern: CUCUMBER_JSON
+                } else {
+                    echo "Cucumber report JSON not found."
+                }
             }
+
+            junit 'target/surefire-reports/**/*.xml'
+
+            // allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
         }
-        // Publish JUnit test result reports
-        junit 'target/surefire-reports/**/*.xml'
-
-        // Publish Allure report
-      //  allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
     }
-}
 
-}
-}
+} // <-- FIN DU pipeline
